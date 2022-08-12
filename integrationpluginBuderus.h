@@ -18,29 +18,41 @@
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef DEVICEPLUGINBUDERUS_H
-#define DEVICEPLUGINBUDERUS_H
+#ifndef INTEGRATIONPLUGINBUDERUS_H
+#define INTEGRATIONPLUGINBUDERUS_H
 
-#include "plugin/deviceplugin.h"
-#include "devicemanager.h"
+#include "integrations/integrationplugin.h"
+#include "plugintimer.h"
+#include <QNetworkReply>
 
-class DevicePluginBuderus: public DevicePlugin
+class IntegrationPluginBuderus: public IntegrationPlugin
 {
     Q_OBJECT
 
-    Q_PLUGIN_METADATA(IID "guru.guh.DevicePlugin" FILE "devicepluginbuderus.json")
-    Q_INTERFACES(DevicePlugin)
+    Q_PLUGIN_METADATA(IID "io.nymea.IntegrationPlugin" FILE "integrationpluginBuderus.json")
+    Q_INTERFACES(IntegrationPlugin)
 
 public:
-    DeviceManager::HardwareResources requiredHardware() const override;
-    DeviceManager::DeviceSetupStatus setupDevice(Device *device) override;
 
-    void guhTimer() override;
-    void networkManagerReplyReady(QNetworkReply *reply) override;
+    explicit IntegrationPluginBuderus();
 
-    void deviceRemoved(Device *device) override;
+    void init() override;
+
+    void setupThing(ThingSetupInfo *info) override;
+
+    void postSetupThing(Thing *thing) override;
+
+    void thingRemoved(Thing *thing) override;
 
 private:
+    PluginTimer *m_pluginTimer = nullptr;
+
+
+    QString m_uuidUrl = "/gateway/uuid";
+    QString m_versionFirmwareUrl = "/gateway/versionFirmware";
+    QString m_temperatureOutdoorUrl = "/system/sensors/temperatures/outdoor_t1";
+
+
     struct Request {
         enum class Type {
             Unknown,
@@ -48,12 +60,12 @@ private:
             State
         };
 
-        Request(const char *url, const ParamTypeId &paramTypeId, Device *device)
-            : url{url}, param{paramTypeId}, device{device}, type{Type::Param}
+        Request(QString url, const ParamTypeId &paramTypeId,Thing *thing)
+            : url{url}, param{paramTypeId}, thing{thing}, type{Type::Param}
         {}
 
-        Request(const char *url, const StateTypeId &stateTypeId, Device *device)
-            : url{url}, state{stateTypeId}, device{device}, type{Type::State}
+        Request(QString url, const StateTypeId &stateTypeId, Thing *thing)
+            : url{url}, state{stateTypeId}, thing{thing}, type{Type::State}
         {}
 
         Request() = default;
@@ -61,17 +73,16 @@ private:
         QString url;
         ParamTypeId param;
         StateTypeId state;
-        Device *device = nullptr;
+        Thing *thing = nullptr;
         Type type = Type::Unknown;
     };
 
     void sendAsyncRequest(const Request &request);
-    QVariant parseValue(Device *device, const QByteArray &responseText,
+    QVariant parseValue(Thing *thing, const QByteArray &responseText,
                         const QString &key = QStringLiteral("value"));
     static QByteArray decrypt(const QByteArray &encrypted, const QByteArray &key);
 
-private:
-    QMap<QNetworkReply*, Request> m_asyncRequests;
+
 };
 
-#endif // DEVICEPLUGINBUDERUS_H
+#endif // INTEGRATIONPLUGINBUDERUS_H

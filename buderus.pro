@@ -1,22 +1,20 @@
-TRANSLATIONS =  translations/en_US.ts \
-                translations/de_DE.ts
+include($$[QT_INSTALL_PREFIX]/include/nymea/plugin.pri)
 
-# Note: include after the TRANSLATIONS definition
-include(plugins.pri)
+INCLUDEPATH += /home/beatnicker/github.com/libmaia
+LIBS += /home/beatnicker/github.com/libmaia/libmaia.a
 
-TARGET = $$qtLibraryTarget(guh_devicepluginbuderus)
 
-message(============================================)
-message("Qt version: $$[QT_VERSION]")
-message("Building $$deviceplugin$${TARGET}.so")
+QT += network xml
+
 
 INCLUDEPATH += \
     external
 
 SOURCES += \
-    devicepluginbuderus.cpp \
-    external/Qt-AES/qaesencryption.cpp
+    external/Qt-AES/qaesencryption.cpp \
+    integrationpluginBuderus.cpp
 
 HEADERS += \
-    devicepluginbuderus.h \
-    external/Qt-AES/qaesencryption.h
+    external/Qt-AES/qaesencryption.h \
+    integrationpluginBuderus.h
+
