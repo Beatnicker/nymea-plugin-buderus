@@ -9,11 +9,13 @@ INCLUDEPATH += \
 
 SOURCES += \
     external/Qt-AES/qaesencryption.cpp \
-    integrationpluginBuderus.cpp
+    integrationpluginBuderus.cpp \
+    oilboiler.cpp
 
 HEADERS += \
     external/Qt-AES/qaesencryption.h \
-    integrationpluginBuderus.h
+    integrationpluginBuderus.h \
+    oilboiler.h
 
 DISTFILES += \
     integrationpluginBuderus.json

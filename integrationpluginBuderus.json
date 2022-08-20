@@ -1,11 +1,11 @@
 {
     "name": "Buderus",
-    "displayName": "Buderus Logamatic Web Gateway KM200",
+    "displayName": "Buderus",
     "id": "86beaa11-1a4b-4da1-b7a2-d06c4013d6e1",
     "vendors": [
         {
             "name": "Buderus",
-            "displayName": "Buderus",
+            "displayName": "Buderus Logamatic Web Gateway KM200",
             "id": "e7502d9b-3c03-4952-baa8-de7a36f1844d",
             "thingClasses": [
                 {
@@ -80,15 +80,63 @@
                         },
                         {
                             "id": "f5673b78-80bc-4e62-a55b-295737968b90",
-                            "name": "connected",
+                            "name":  "connected",
                             "displayName": "connected",
                             "displayNameEvent": "connected changed",
                             "type": "bool",
                             "defaultValue": false
                         }
                     ]
+                },
+                {
+                    "id": "32203207-6dce-4187-8059-b1941c83a94f",
+                    "name": "buderusOilBurner",
+                    "displayName": "OilBoiler",
+                    "interfaces": [],
+                    "createMethods": ["auto"],
+                    "paramTypes":[
+                        {
+                            "id": "62e9a5e0-748b-43ec-b38a-e05174af838f",
+                            "name": "HeatingID",
+                            "displayName": "Heating ID",
+                            "type": "QString"
+                        }
+                    ],
+                    "stateTypes":[
+                        {
+                            "id": "8d16f859-58bb-4625-9145-b24200664bc9",
+                            "displayName": "Actual Power",
+                            "name": "actualPower",
+                            "displayNameEvent": "Oil Boiler actual powerchanged",
+                            "type": "float",
+                            "unit": "UnitKiloWatt",
+                            "defaultValue": 0
+
+                        },                    
+                        {
+                            "id": "8ce9a015-51f3-4ed3-aa75-efce128f4e27",
+                            "displayName": "Number of starts",
+                            "name": "numberOfStarts",
+                            "displayNameEvent": "Number of starts powerchanged",
+                            "type": "float",
+                            "unit": "UnitKiloWatt",
+                            "defaultValue": 0
+
+                        },
+                        {
+                            "id": "836178d2-0748-4fd1-a5af-25e93e01f1e4",
+                            "name": "flameStatus",
+                            "displayName": "Flame status",
+                            "displayNameEvent": "flame status changed",
+                            "type": "bool",
+                            "defaultValue": false
+                        },
+
+                    ]
                 }
+            
             ]
+
         }
     ]
 }
