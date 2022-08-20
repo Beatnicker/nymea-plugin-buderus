@@ -1,20 +1,20 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                         *
- *  Copyright (C) 2017 Christian Fetzer <fetzer.ch@gmail.com>              *
+ *  Copyright (C) 2020 Michael Menner <m.menner@t-online.de>               *
  *                                                                         *
- *  This file is part of guh.                                              *
+ *  This library is free software; you can redistribute it and/or          *
+ *  modify it under the terms of the GNU Lesser General Public             *
+ *  License as published by the Free Software Foundation;                  *
+ *  version 3 of the License.                                              *
  *                                                                         *
- *  Guh is free software: you can redistribute it and/or modify            *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, version 2 of the License.                *
- *                                                                         *
- *  Guh is distributed in the hope that it will be useful,                 *
+ *  This library is distributed in the hope that it will be useful,        *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
- *  GNU General Public License for more details.                           *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU      *
+ *  Lesser General Public License for more details.                        *
  *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with guh. If not, see <http://www.gnu.org/licenses/>.            *
+ *  You should have received a copy of the GNU Lesser General Public       *
+ *  License along with this library; If not, see                           *
+ *  <http://www.gnu.org/licenses/>.                                        *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -53,12 +53,12 @@ void IntegrationPluginBuderus::setupThing(ThingSetupInfo *info)
     Thing *thing = info->thing();
 
     if(thing->thingClassId() == buderusGatewayThingClassId){
-        auto host = thing->paramValue(buderusGatewayThingBuderusHostParamTypeId).toString();
-        auto port = thing->paramValue(buderusGatewayThingBuderusPortParamTypeId).toString();
+        QString host = thing->paramValue(buderusGatewayThingBuderusHostParamTypeId).toString();
+        QString port = thing->paramValue(buderusGatewayThingBuderusPortParamTypeId).toString();
         qCDebug(dcBuderus()) << "Configuring device" << QString("http://%1:%2").arg(host).arg(port);
 
-        sendAsyncRequest(Request{m_uuidUrl, buderusGatewayThingBuderusIdParamTypeId, thing});
-        sendAsyncRequest(Request{m_versionFirmwareUrl, buderusGatewayThingBuderusVersionParamTypeId, thing});
+        sendAsyncRequest(Request{m_uuidUrl, buderusGatewayBuderusVersionStateTypeId , thing});
+        sendAsyncRequest(Request{m_versionFirmwareUrl, buderusGatewayBuderusVersionStateTypeId, thing});
 
     }
 
@@ -110,16 +110,22 @@ void IntegrationPluginBuderus::sendAsyncRequest(const Request &request)
 
     connect(reply,&QNetworkReply::finished, reply , [this, reply, request]{
         Thing *thing = request.thing;
+        qCDebug(dcBuderus) << "finished ";
+
 
         if (!reply->error()) {
             auto value = parseValue(request.thing , reply->readAll());
             qCDebug(dcBuderus) << "Received value:" << request.url << value;
             if (request.type == Request::Type::Param) {
-                thing->setParamValue(request.param, value);
-                if (request.url == m_versionFirmwareUrl) {
+
+
+            } else if (request.type == Request::Type::State) {
+                qCDebug(dcBuderus) << "set state:" << request.state << value;
+                if (request.url.contains(m_versionFirmwareUrl)) {
+                    qCDebug(dcBuderus) << "Connected true";
                     thing->setStateValue(buderusGatewayConnectedStateTypeId,true);
                 }
-            } else if (request.type == Request::Type::State) {
+
                 thing ->setStateValue(request.state, value);
             }
 
@@ -129,7 +135,8 @@ void IntegrationPluginBuderus::sendAsyncRequest(const Request &request)
             }
         } else {
             qCWarning(dcBuderus) << "Reply error" << reply->errorString();
-            if (request.url == m_versionFirmwareUrl) {
+            if (request.url.contains(m_versionFirmwareUrl)) {
+                qCDebug(dcBuderus) << "Connected false";
                 thing->setStateValue(buderusGatewayConnectedStateTypeId,false);
             }
         }

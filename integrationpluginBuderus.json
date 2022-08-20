@@ -5,14 +5,14 @@
     "vendors": [
         {
             "name": "Buderus",
-            "displayName": "buderus",
+            "displayName": "Buderus",
             "id": "e7502d9b-3c03-4952-baa8-de7a36f1844d",
             "thingClasses": [
                 {
                     "id": "a0765140-0632-44a1-b287-ddce6dd5973e",
                     "name": "buderusGateway",
                     "displayName": "Buderus Logamatic Web Gateway KM200",
-                    "interfaces": ["gateway"],
+                    "interfaces": [],
                     "createMethods": ["user"],
                     "paramTypes": [
                         {
@@ -26,8 +26,7 @@
                             "id": "35a265f0-4495-4cb5-9c45-bf341e0380da",
                             "displayName": "Gateway Port",
                             "name": "buderusPort",
-                            "type": "int",
-                            "inputType": "TextLine",
+                            "type": "int",                           
                             "defaultValue": "80"
                         },
                         {
@@ -35,26 +34,30 @@
                             "displayName": "Gateway Key",
                             "name": "buderusKey",
                             "type": "QString",
-                            "inputType": "TextLine"
-                        },
+                            "defaultValue": ""                        
+                        }
+                    ],
+                    "stateTypes":[
+                        
                         {
                             "id": "56c83bc0-c30a-4814-b0f5-57f39c246b77",
                             "displayName": "Gateway Id",
                             "name": "buderusId",
-                            "type": "QString",
-                            "inputType": "TextLine",
-                            "readOnly": true
+                            "displayNameEvent": "Gateway Id changed",
+                            "displayNameAction": "Gateway Id changed",
+                            "type": "QString",                                                      
+                            "defaultValue": ""                        
+                             
                         },
                         {
                             "id": "95b2edc7-d691-43f2-a799-ff4735c637db",
                             "displayName": "Gateway Version",
                             "name": "buderusVersion",
-                            "type": "QString",
-                            "inputType": "TextLine",
-                            "readOnly": true
-                        }
-                    ],
-                    "stateTypes":[
+                            "displayNameEvent": "Gateway Version changed",
+                            "type": "QString",                           
+                            "defaultValue": ""
+                            
+                        },
                         {
                             "id": "aa3c44cd-f44b-4fac-ba94-20cfd12581ca",
                             "name": "updateTime",
@@ -76,12 +79,12 @@
                             "defaultValue": 0
                         },
                         {
-                        "id": "f5673b78-80bc-4e62-a55b-295737968b90",
-                        "name": "connected",
-                        "displayName": "connected",
-                        "displayNameEvent": "connected changed",
-                        "type": "bool",
-                        "defaultValue": false
+                            "id": "f5673b78-80bc-4e62-a55b-295737968b90",
+                            "name": "connected",
+                            "displayName": "connected",
+                            "displayNameEvent": "connected changed",
+                            "type": "bool",
+                            "defaultValue": false
                         }
                     ]
                 }

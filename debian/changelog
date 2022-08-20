@@ -1,6 +1,5 @@
-guh-plugin-buderus (0.1) UNRELEASED; urgency=medium
+nymea-plugin-buderus (0.0.1) xenial; urgency=medium
 
-  [ Christian Fetzer ]
-  * Initial release. (Closes: #XXXXXX)
+  * Initial release.
 
- --  <fetzerch@gmail.com>  Sun, 05 Nov 2017 17:12:00 +0000
+ -- Michael Menner <m.menner@t-online.de>  Sat, 22 Aug 2022 10:12:00 +0000
